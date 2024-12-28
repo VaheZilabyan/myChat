@@ -91,7 +91,8 @@ void server::SendToClient(QString message)
     QDataStream out(&data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_6);
 
-    QString str = "<" + QDateTime::currentDateTime().toString() + " user1> " + message;
+    QStringList data_list = message.split('$');
+    QString str = "<" + QDateTime::currentDateTime().toString() + ", " + data_list[1] + "> " + data_list[0];
     //out << str;
 
     out << quint16(0);

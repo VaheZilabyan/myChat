@@ -45,6 +45,12 @@ ChatWindow::ChatWindow(QWidget *parent)
     });
 }
 
+void ChatWindow::setUsername(const QString &username)
+{
+    m_username = username;
+    setWindowTitle(m_username);
+}
+
 void ChatWindow::slotSocketReadyRead() {
     QDataStream in(socket);
     in.setVersion(QDataStream::Qt_6_6);
@@ -82,6 +88,8 @@ void ChatWindow::slotSocketReadyRead() {
 
 void ChatWindow::sendToServer(QString str)
 {
+    str += "$" + m_username;
+
     data.clear();
     QDataStream out(&data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_6);

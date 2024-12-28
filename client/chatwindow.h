@@ -13,6 +13,7 @@ class ChatWindow : public QMainWindow
 
 public:
     ChatWindow(QWidget *parent = nullptr);
+    void setUsername(const QString& username);
     ~ChatWindow();
 
 public slots:
@@ -27,6 +28,7 @@ private:
     QTcpSocket *socket;
     QByteArray data;
     quint16 nextBlockSize{0};
+    QString m_username;
 private:
     QTextBrowser *textWindow;
     QLineEdit *inputLine;

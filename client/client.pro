@@ -1,4 +1,4 @@
-QT       += core gui network
+QT       += core gui network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,10 +10,21 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    chatwindow.cpp
+    chatwindow.cpp \
+    ../LoginSystem/loginwindow.cpp \
+    ../LoginSystem/dbmanager.cpp \
+    ../LoginSystem/sign_in.cpp \
+    ../LoginSystem/sign_up.cpp \
+    ../LoginSystem/checker.cpp
 
 HEADERS += \
-    chatwindow.h
+    chatwindow.h \
+    ../LoginSystem/loginwindow.h \
+    ../LoginSystem/dbmanager.h \
+    ../LoginSystem/sign_in.h \
+    ../LoginSystem/sign_up.h \
+    ../LoginSystem/checker.h
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
