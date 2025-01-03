@@ -1,7 +1,10 @@
 #ifndef CHATWINDOW_H
 #define CHATWINDOW_H
 
+#include "../LoginSystem/dbmanager.h"
+
 #include <QMainWindow>
+#include <QListWidget>
 #include <QTcpSocket>
 #include <QTextBrowser>
 #include <QLineEdit>
@@ -14,25 +17,35 @@ class ChatWindow : public QMainWindow
 public:
     ChatWindow(QWidget *parent = nullptr);
     void setUsername(const QString& username);
+    void setId(int id);
+    void requestMessageHistory(int partnerId);
     ~ChatWindow();
 
 public slots:
     void slotSocketReadyRead();
+private slots:
+    void on_findButton_clicked();
     void on_connectButton_clicked();
     void on_sendButton_clicked();
+    void onUserSelected(QListWidgetItem *item);
 
 private:
-    void sendToServer(QString message);
+    void sendToServer(const QString& message);
 
 private:
     QTcpSocket *socket;
-    QByteArray data;
-    quint16 nextBlockSize{0};
+    //DBManager* dbManager;
     QString m_username;
+    int m_userId;
+    QString clicked_username;
+    int clicked_usernameID{0};
 private:
     QTextBrowser *textWindow;
     QLineEdit *inputLine;
     QPushButton *sendButton;
     QPushButton *connectButton;
+    QListWidget *usersList;
+    QLineEdit *findLine;
+    QPushButton *findButton;
 };
 #endif // CHATWINDOW_H

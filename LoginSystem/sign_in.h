@@ -27,10 +27,10 @@ private slots:
 signals:
     void signal_back();
     void signal_sign_up();
-    void signal_login_successfully(const QString&);
+    void signal_login_successfully(int);
 
 private:
-    DBManager dbm;
+    //DBManager dbm;
 
 private: //gui
     QLineEdit *lineEdit_login;

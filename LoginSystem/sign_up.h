@@ -27,7 +27,7 @@ signals:
     void signal_back();
 
 private:
-    DBManager dbm;
+    //DBManager dbm;
 
 private: //gui
     QPushButton *create_button;

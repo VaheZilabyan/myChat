@@ -60,30 +60,31 @@ Sign_in::Sign_in(QWidget *parent) :
 
 void Sign_in::on_login_clicked()
 {
-    if (dbm.connectToDatabase() && dbm.getDatabase().tables().size() > 0) {
-        QSqlQuery *query = new QSqlQuery(dbm.getDatabase());
-        if(query->exec("select * from User where Username='" + lineEdit_login->text()+ "' and Password='" + dbm.hashPassword(lineEdit_password->text()) + "'")) {
+    if (DBManager::instance()->connectToDatabase()) { // && dbm.getDatabase().tables().size() > 0) {
+        QSqlQuery *query = new QSqlQuery(DBManager::instance()->getDatabase());
+        if(query->exec("select * from Users where Username='" + lineEdit_login->text()+ "' and Password='" + DBManager::instance()->hashPassword(lineEdit_password->text()) + "'")) {
             // counti 1-i depqum e petq mutq gorcel
             int count = 0;
             QString name = "";
             QString surname = "";
             while (query->next()) {
                 ++count;
-                name = query->value(2).toString();
-                surname = query->value(3).toString();
+                name = query->value(3).toString();
+                surname = query->value(4).toString();
             }
             if (count == 1) {
                 qDebug() << "USER FINDED" << '\n';
                 QMessageBox::information(0, "You Log in", "You login successfully, " + name + " " + surname);
                 //lineEdit_login->clear();
                 //lineEdit_password->clear();
+                //qDebug() << "ID -> " << dbm.getIdByUsername(lineEdit_login->text());
 
-                emit signal_login_successfully(lineEdit_login->text());
+                int id = DBManager::instance()->getIdByUsername(lineEdit_login->text());
+                emit signal_login_successfully(id);
             } else {
                 QMessageBox::information(0, "Error", "Wrong login or password...");
             }
         }
-        dbm.close();
     } else {
         qDebug() << "error when open...\n";
         QMessageBox::information(0, "Error", "Database is empty");

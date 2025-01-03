@@ -83,7 +83,7 @@ LoginWindow::~LoginWindow()
 {
 }
 
-void LoginWindow::slot_login_successfully(const QString& username)
+void LoginWindow::slot_login_successfully(int id)
 {
-    emit signal_login_successfully(username);
+    emit signal_login_successfully(id);
 }

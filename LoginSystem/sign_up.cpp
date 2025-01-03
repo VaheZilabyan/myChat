@@ -2,6 +2,7 @@
 #include "checker.h"
 
 #include <QMessageBox>
+#include <QSqlQuery>
 #include <QLabel>
 #include <Qfile>
 
@@ -96,14 +97,14 @@ void Sign_up::on_Create_clicked()
     QString errors = result.second;
 
     if (fields_is_correct){
-        if(dbm.connectToDatabase()) {
-            QSqlQuery *query = new QSqlQuery(dbm.getDatabase());
+        if(DBManager::instance()->connectToDatabase()) {
+            QSqlQuery *query = new QSqlQuery(DBManager::instance()->getDatabase());
             //create if not exist
-            query->exec("CREATE TABLE IF NOT EXISTS User(Username TEXT, Password TEXT, Name TEXT, Surname TEXT, Mail TEXT, Phone TEXT)");
+            query->exec("CREATE TABLE IF NOT EXISTS Users(Username TEXT, Password TEXT, Name TEXT, Surname TEXT, Mail TEXT, Phone TEXT)");
 
-            query->prepare("insert into User (Username, Password, Name, Surname, Mail, Phone) values (?, ?, ?, ?, ?, ?)");
+            query->prepare("insert into Users (Username, Password, Name, Surname, Mail, Phone) values (?, ?, ?, ?, ?, ?)");
             query->addBindValue(username->text());
-            query->addBindValue(dbm.hashPassword(password->text()));
+            query->addBindValue(DBManager::instance()->hashPassword(password->text()));
             query->addBindValue(name->text());
             query->addBindValue(surname->text());
             query->addBindValue(mail->text());
@@ -117,7 +118,6 @@ void Sign_up::on_Create_clicked()
             while (query->next()) {
                 qDebug() << query->value(0).toString() << "+" << query->value(1).toString() << '\n';
             }
-            dbm.close();
         } else {
             qDebug() << "error when open...\n";
         }

@@ -20,9 +20,9 @@ public:
     ~LoginWindow();
 
 public slots:
-    void slot_login_successfully(const QString&);
+    void slot_login_successfully(int id);
 signals:
-    void signal_login_successfully(const QString&);
+    void signal_login_successfully(int id);
 
 private slots:
     void slot_back();
