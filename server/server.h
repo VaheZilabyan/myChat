@@ -25,7 +25,6 @@ private:
     void broadcastToClients(const QJsonObject &message); // Broadcast data to all clients
     int authenticateUser(QTcpSocket *socket);
 private:
-    //QVector<QTcpSocket*> sockets;
     QMap<int, QTcpSocket*> clients; // id, socket
 };
 

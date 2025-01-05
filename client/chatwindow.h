@@ -34,11 +34,10 @@ private:
 
 private:
     QTcpSocket *socket;
-    //DBManager* dbManager;
     QString m_username;
     int m_userId;
-    QString clicked_username;
-    int clicked_usernameID{0};
+    QString m_partnerUsername;
+    int m_partnerID{0};
 private:
     QTextBrowser *textWindow;
     QLineEdit *inputLine;

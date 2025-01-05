@@ -81,21 +81,25 @@ void ChatWindow::slotSocketReadyRead() {
 
     if (type == "message") {
         QString sender = json["sender"].toString();
-        QString text = json["message"].toString();
-        textWindow->append(sender + ": " + text);
+        QString message = json["message"].toString();
+        textWindow->append(sender + ": " + message);
     } else if (type == "message_history") {
+        textWindow->clear();
         QJsonArray messages = json["messages"].toArray();
-        for (const auto &msg : messages) {
-            QJsonObject message = msg.toObject();
-            QString sender = message["sender"].toString();
-            QString text = message["message"].toString();
-            textWindow->append(sender + ": " + text);
+        if (messages.isEmpty()) {
+            qDebug() << "No messages found!";
+            textWindow->append("<i>Empty history...</i>");
+        } else {
+            for (const auto &msg : messages) {
+                QJsonObject message = msg.toObject();
+                QString sender = message["sender"].toString();
+                QString text = message["message"].toString();
+                textWindow->append(sender + ": " + text);
+            }
         }
-    } else if (type == "info") {
-        // use italic format
-        //
-    } else if (type == "login_success") {
-
+    } else if (type == "connect") {
+        QString message = json["message"].toString();
+        textWindow->append("<i>" + message + " (username: " + m_username + ") </i>");
     }
 }
 
@@ -105,7 +109,7 @@ void ChatWindow::sendToServer(const QString &message)
     json["type"] = "message";
     json["sender"] = m_username;
     json["sender_id"] = m_userId;
-    json["receiver_id"] = clicked_usernameID;
+    json["receiver_id"] = m_partnerID;
     json["message"] = message;
 
     QJsonDocument doc(json);
@@ -124,44 +128,47 @@ void ChatWindow::requestMessageHistory(int partnerId) {
 }
 
 void ChatWindow::onUserSelected(QListWidgetItem *item) {
-    clicked_username = item->text();
-    int currentClickedID = clicked_usernameID; // if paymani hamar
-    clicked_usernameID = DBManager::instance()->getIdByUsername(clicked_username);
-    qDebug() << "clicked username: " << clicked_username << " " << QString::number(clicked_usernameID);
+    m_partnerUsername = item->text();
+    int prevClickedID = m_partnerID; // if paymani hamar
+    m_partnerID = DBManager::instance()->getIdByUsername(m_partnerUsername);
+    qDebug() << "clicked username: " << m_partnerUsername << " " << QString::number(m_partnerID);
 
-    if (currentClickedID != clicked_usernameID) {
-        requestMessageHistory(clicked_usernameID);
+    if (prevClickedID != m_partnerID) {
+        qDebug() << "request for message history with " << m_partnerID;
+        requestMessageHistory(m_partnerID);
     }
 }
 
 void ChatWindow::setUsername(const QString &username)
 {
+    if (!DBManager::instance()->connectToDatabase()) {
+        qDebug() << "ChatWindow::setUsername can't connect to Database";
+    }
     m_username = username;
     m_userId = DBManager::instance()->getIdByUsername(m_username);
-    qDebug() << "in Client code " << m_userId << " " << m_username;
+    //qDebug() << "setId -> " << m_userId;
+    //qDebug() << "username -> " << m_username;
     setWindowTitle(m_username);
 }
 
 void ChatWindow::setId(int id)
 {
     if (!DBManager::instance()->connectToDatabase()) {
-        qDebug() << "database not open in chatwindow";
+        qDebug() << "ChatWindow::setId can't connect to Database";
     }
     m_userId = id;
-    qDebug() << "setId -> " << id;
     m_username = DBManager::instance()->getUsernameById(id);
-    qDebug() << "setId username -> " << m_username;
     setWindowTitle(m_username);
 }
 
 void ChatWindow::on_connectButton_clicked() {
     socket->connectToHost("127.0.0.1", 5555);
-    qDebug() << "Connect button clicked";
 
-    QJsonObject loginRequest;
-    loginRequest["type"] = "login";
-    loginRequest["sender"] = m_username;
-    QJsonDocument doc(loginRequest);
+    // for adding clients to QMap
+    QJsonObject addClient;
+    addClient["type"] = "addClient";
+    addClient["sender"] = m_username;
+    QJsonDocument doc(addClient);
     socket->write(doc.toJson());
 }
 
