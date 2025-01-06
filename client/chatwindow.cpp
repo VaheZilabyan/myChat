@@ -162,7 +162,7 @@ void ChatWindow::setId(int id)
 }
 
 void ChatWindow::on_connectButton_clicked() {
-    socket->connectToHost("127.0.0.1", 5555);
+    socket->connectToHost("127.0.0.1", 1234);
 
     // for adding clients to QMap
     QJsonObject addClient;

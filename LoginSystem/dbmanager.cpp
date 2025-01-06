@@ -31,6 +31,47 @@ bool DBManager::connectToDatabase()
         return false;
     }
     qDebug() << "DBManager::connectToDatabase() Connected to database!";
+
+    QSqlQuery query(db);
+    if (!query.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Users';")) {
+        qDebug() << "Failed to check 'Users' table: " << query.lastError().text();
+        return false;
+    }
+    if (!query.next()) {
+        if (!query.exec(
+                "CREATE TABLE IF NOT EXISTS Users ("
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                "Username TEXT UNIQUE, "
+                "Password TEXT, "
+                "Name TEXT, "
+                "Surname TEXT, "
+                "Mail TEXT, "
+                "Phone TEXT);")) {
+            qDebug() << "Failed to create 'Users' table: " << query.lastError().text();
+            return false;
+        }
+        qDebug() << "'Users' table created!";
+    }
+    if (!query.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='messages';")) {
+        qDebug() << "Failed to check 'messages' table: " << query.lastError().text();
+        return false;
+    }
+    if (!query.next()) {
+        if (!query.exec(
+                "CREATE TABLE IF NOT EXISTS messages ("
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                "sender_id INTEGER, "
+                "receiver_id INTEGER, "
+                "message TEXT, "
+                "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                "FOREIGN KEY(sender_id) REFERENCES Users(id), "
+                "FOREIGN KEY(receiver_id) REFERENCES Users(id));")) {
+            qDebug() << "Failed to create 'messages' table: " << query.lastError().text();
+            return false;
+        }
+        qDebug() << "'messages' table created!";
+    }
+
     return true;
 }
 

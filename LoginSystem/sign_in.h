@@ -27,7 +27,7 @@ private slots:
 signals:
     void signal_back();
     void signal_sign_up();
-    void signal_login_successfully(int);
+    void signal_login_successfully(const QString&);
 
 private:
     //DBManager dbm;

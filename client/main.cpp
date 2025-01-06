@@ -13,21 +13,12 @@ int main(int argc, char *argv[])
     ChatWindow chatWindow;
 
     loginWindow.show();
-    QObject::connect(&loginWindow, &LoginWindow::signal_login_successfully, [&](int id) {
+    QObject::connect(&loginWindow, &LoginWindow::signal_login_successfully, [&](const QString& username) {
         loginWindow.hide();
 
-        chatWindow.setId(id);
+        chatWindow.setUsername(username);
         chatWindow.show();
     });
-
-    /*DBManager db;
-    if (!db.connectToDatabase()) {
-        qDebug() << "DB not connected";
-        return -1;
-    }
-
-    ChatWindow chat;
-    chat.show();*/
 
     return a.exec();
 }

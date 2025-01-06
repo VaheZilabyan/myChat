@@ -13,7 +13,7 @@ server::server() {
 
 void server::startServer()
 {
-    if (this->listen(QHostAddress::Any, 5555)) {
+    if (this->listen(QHostAddress::Any, 1234)) {
         qDebug() << "Server started";
     } else {
         qDebug() << "Server not started, error...";

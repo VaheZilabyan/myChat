@@ -60,7 +60,7 @@ Sign_in::Sign_in(QWidget *parent) :
 
 void Sign_in::on_login_clicked()
 {
-    if (DBManager::instance()->connectToDatabase()) { // && dbm.getDatabase().tables().size() > 0) {
+    if (DBManager::instance()->connectToDatabase()) {
         QSqlQuery *query = new QSqlQuery(DBManager::instance()->getDatabase());
         if(query->exec("select * from Users where Username='" + lineEdit_login->text()+ "' and Password='" + DBManager::instance()->hashPassword(lineEdit_password->text()) + "'")) {
             // counti 1-i depqum e petq mutq gorcel
@@ -79,8 +79,8 @@ void Sign_in::on_login_clicked()
                 //lineEdit_password->clear();
                 //qDebug() << "ID -> " << dbm.getIdByUsername(lineEdit_login->text());
 
-                int id = DBManager::instance()->getIdByUsername(lineEdit_login->text());
-                emit signal_login_successfully(id);
+                //int id = DBManager::instance()->getIdByUsername(lineEdit_login->text());
+                emit signal_login_successfully(lineEdit_login->text());
             } else {
                 QMessageBox::information(0, "Error", "Wrong login or password...");
             }
