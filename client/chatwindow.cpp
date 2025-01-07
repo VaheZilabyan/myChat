@@ -23,16 +23,20 @@ ChatWindow::ChatWindow(QWidget *parent)
     // chat layout
     QVBoxLayout *chatLayout = new QVBoxLayout();
     QHBoxLayout *southLayout = new QHBoxLayout();
+    QHBoxLayout *northLayout = new QHBoxLayout();
 
     inputLine = new QLineEdit(this);
     sendButton = new QPushButton("Send", this);
     connectButton = new QPushButton("Connect to server", this);
+    aboutButton = new QPushButton("About me", this);
     textWindow = new QTextBrowser(this);
 
+    northLayout->addWidget(connectButton, 6);
+    northLayout->addWidget(aboutButton, 1);
     southLayout->addWidget(inputLine);
     southLayout->addWidget(sendButton);
 
-    chatLayout->addWidget(connectButton);
+    chatLayout->addLayout(northLayout);
     chatLayout->addWidget(textWindow);
     chatLayout->addLayout(southLayout);
 
@@ -41,11 +45,11 @@ ChatWindow::ChatWindow(QWidget *parent)
     findLine = new QLineEdit(this);
     findButton = new QPushButton("Find user", this);
     usersList = new QListWidget(this);
-    QHBoxLayout *northLayout = new QHBoxLayout();
-    northLayout->addWidget(findLine);
-    northLayout->addWidget(findButton);
+    QHBoxLayout *findLayout = new QHBoxLayout();
+    findLayout->addWidget(findLine);
+    findLayout->addWidget(findButton);
 
-    usersLayout->addLayout(northLayout);
+    usersLayout->addLayout(findLayout);
     usersLayout->addWidget(usersList);
 
     // mainLayout
@@ -57,6 +61,7 @@ ChatWindow::ChatWindow(QWidget *parent)
     connect(findButton, &QPushButton::clicked, this, &ChatWindow::on_findButton_clicked);
     connect(sendButton, &QPushButton::clicked, this, &ChatWindow::on_sendButton_clicked);
     connect(connectButton, &QPushButton::clicked, this, &ChatWindow::on_connectButton_clicked);
+    connect(aboutButton, &QPushButton::clicked, this, &ChatWindow::on_aboutButton_clicked);
     connect(socket, &QTcpSocket::connected, this, []() {
         qDebug() << "Connected to server!";
     });
@@ -174,6 +179,16 @@ void ChatWindow::on_connectButton_clicked() {
 
 void ChatWindow::on_sendButton_clicked() {
     sendToServer(inputLine->text());
+}
+
+void ChatWindow::on_aboutButton_clicked()
+{
+    QVector<QString> data = DBManager::instance()->getAllData(m_username);
+    QString str = "";
+    for (auto& d : data) {
+        str += d + "\n";
+    }
+    QMessageBox::information(0, "About me", str);
 }
 
 void ChatWindow::on_findButton_clicked() {

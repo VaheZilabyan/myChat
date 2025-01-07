@@ -17,6 +17,7 @@ public:
     QList<QVariantMap> fetchMessages(int userId1, int userId2);
 
     // Static utility methods
+    static QVector<QString> getAllData(const QString& username);
     static int getIdByUsername(const QString& username);
     static QString getUsernameById(int id);
     static bool usernameExists(const QString& username);

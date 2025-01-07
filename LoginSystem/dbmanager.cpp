@@ -129,6 +129,31 @@ QList<QVariantMap> DBManager::fetchMessages(int userId1, int userId2) {
     return messages;
 }
 
+QVector<QString> DBManager::getAllData(const QString &username)
+{
+    QVector<QString> userData;
+    QSqlQuery query;
+    query.prepare("SELECT Name, Surname, Mail, Phone FROM Users WHERE Username = :username");
+    query.bindValue(":username", username);
+
+    if (!query.exec()) {
+        qDebug() << "Failed to fetch user data:" << query.lastError().text();
+        return userData;
+    }
+
+    while (query.next()) {
+        QString name = query.value(0).toString();
+        QString surname = query.value(1).toString();
+        QString mail = query.value(2).toString();
+        QString phone = query.value(3).toString();
+        userData.append(name);
+        userData.append(surname);
+        userData.append(mail);
+        userData.append(phone);
+    }
+    return userData;
+}
+
 int DBManager::getIdByUsername(const QString &username) {
     QSqlQuery query;
     query.prepare("SELECT id FROM Users WHERE Username = :username");

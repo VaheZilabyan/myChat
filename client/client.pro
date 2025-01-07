@@ -18,7 +18,7 @@ SOURCES += \
     ../LoginSystem/dbmanager.cpp \
     ../LoginSystem/sign_in.cpp \
     ../LoginSystem/sign_up.cpp \
-    ../LoginSystem/checker.cpp
+    ../LoginSystem/checker.cpp \
 
 HEADERS += \
     chatwindow.h \
@@ -26,7 +26,7 @@ HEADERS += \
     ../LoginSystem/dbmanager.h \
     ../LoginSystem/sign_in.h \
     ../LoginSystem/sign_up.h \
-    ../LoginSystem/checker.h
+    ../LoginSystem/checker.h \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

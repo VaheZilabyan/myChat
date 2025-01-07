@@ -27,6 +27,7 @@ private slots:
     void on_findButton_clicked();
     void on_connectButton_clicked();
     void on_sendButton_clicked();
+    void on_aboutButton_clicked();
     void onUserSelected(QListWidgetItem *item);
 
 private:
@@ -43,6 +44,7 @@ private:
     QLineEdit *inputLine;
     QPushButton *sendButton;
     QPushButton *connectButton;
+    QPushButton *aboutButton;
     QListWidget *usersList;
     QLineEdit *findLine;
     QPushButton *findButton;

@@ -1,5 +1,4 @@
 #include "chatwindow.h"
-
 #include "../LoginSystem/loginwindow.h"
 #include "../LoginSystem/dbmanager.h"
 
