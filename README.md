@@ -40,3 +40,16 @@ This is a real-time chat application built using Qt and C++ for both client and 
 ## Database Details
 - **SQLite database and tables are created dynamically when the application runs for the first time.**
 - **Authentication and message logs are stored in the database.**
+
+
+## Chat Application Screenshot
+### Registration:
+![Registration](images/registration.png)
+### Sign up:
+![sign_up](images/sign_up.png)
+### Sign in
+![sign_in](images/sign_in.png)
+### Chat window
+![mainWindow](images/mainWindow.png)
+### Message history
+![messageHistory](images/messageHistory.png)
